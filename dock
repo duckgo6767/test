@@ -23,4 +23,4 @@ WORKDIR /root/repo
 
 RUN \
 df -h ;\
-repo init -u https://github.com/Evolution-X/manifest.git --depth=1 -g default,-mips,-darwin,-notdefault;time time repo sync -c -j12 --force-sync --no-clone-bundle --no-tags ;ls -lhA ; du -sh . .repo;df -h
+repo init -u https://github.com/Evolution-X/manifest.git --depth=1 -g default,-mips,-darwin,-notdefault;time time repo sync -c -j12 --force-sync --no-clone-bundle --no-tags -n;ls -lhA ; du -sh . .repo;df -h
