@@ -1,0 +1,26 @@
+FROM ubuntu:20.04
+
+ENV packages "curl git iputils-ping python3"
+ENV DEBIAN_FRONTEND noninteractive
+ENV TZ="Asia/Kolkata"
+
+#shell invokation
+RUN ln -sf /bin/bash /bin/sh
+
+WORKDIR /tmp
+
+RUN \
+apt update >/dev/null 2>/dev/null;echo -e "\n\n-----        Installing basic packages       ------\n\n"; \
+echo Installing $packages ; \
+time apt install -yq $packages >/dev/null 2>/dev/null && ln -sf python3 /usr/bin/python && command -v python python3 && python -V ;\
+echo "Installing repo";\
+curl --create-dirs -L -o /usr/local/bin/repo -O -L https://storage.googleapis.com/git-repo-downloads/repo;\
+chmod a+rx /usr/local/bin/repo
+
+RUN df -h .
+
+WORKDIR /root/repo
+
+RUN \
+repo ;repo init -u https://github.com/Evolution-X/manifest.git --depth=1;time time repo sync -c -j12 --force-sync --no-clone-bundle --no-tags
+
