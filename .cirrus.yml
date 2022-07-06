@@ -5,16 +5,16 @@ test_task:
   timeout_in: 100m
   container:
     dockerfile: dock
-    cpu: 1
-    memory: 1
+    cpu: 6
+    memory: 22G
 
   test_script: |
     set +e -vx
-    cat $(echo $0)
+    cat $(echo $0) ;echo
     ls -lhA $(dirname $0)
-    a(){ echo $1;}
-    a "hacker hackyo"
-    echo -e "\n\n--   Adding user hacker ----\n\n" ; \
     adduser --gecos "" --disabled-password hacker ; passwd -d hacker ; usermod -aG sudo hacker
-    echo $?
-    ls -lhA /root{,/repo}
+    ls -lhA /root{,/repo} /home{,/hacker}
+    mv /root/repo /home/hacker;df -h .
+    cd /home/hacker/repo;ls -lhA
+    repo sync -c -j12 --force-sync --no-clone-bundle --no-tags
+    df -h .
